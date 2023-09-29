@@ -9,6 +9,27 @@ This app runs on Google Apps Script, therefore no cost for hosting is required. 
 
 <br>
 
+## User Interface
+
+### Top
+You can select either `Court User Data` or `Court List` page.
+
+![top](https://github.com/coding-chance/Wanna-Basket/blob/master/ui/top.jpg?raw=true)
+
+### Number of Users
+On this page, you can check how many user occupys the court and you can register the number of users through the app.
+
+![court-info-top](https://github.com/coding-chance/Wanna-Basket/blob/master/ui/court-info-top.jpg?raw=true)
+
+### Court List
+You can check list of basket court and itenerary.
+
+![court-list-map-gif](https://github.com/coding-chance/Wanna-Basket/blob/master/ui/court-list-map-link-click.gif?raw=true)
+
+
+
+<br>
+
 ## Installation
 This app is written in GAS (Google Apps Script) and this is container-bound script which is bound to a spread sheet. Please set up by following the steps below.
 

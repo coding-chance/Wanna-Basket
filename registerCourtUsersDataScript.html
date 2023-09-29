@@ -1,0 +1,59 @@
+<script>
+  /** This is the script file for court-user-data.html */
+  // Process that runs right after page load
+  window.addEventListener("load", (event) => {
+    /** Get days and put them in `input` tag */
+    daysInWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let today = new Date();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+    let dayOfWeek = [today.getDay()];
+    document.getElementById('month').value = month;
+    document.getElementById('day').value = day;
+    var select = document.getElementById("dayOfWeek");
+    select.options[today.getDay()].selected = true;
+
+    /** Listen to send button press */
+    document.getElementById("sendButton").addEventListener('click', () => {
+      document.getElementById("sendButton").style.display = "none"; // hide button
+      document.getElementsByClassName('doubleLoader')[0].style.display = "block"; // show loader
+      let selectedCourtName = courtListDropdown.value;   // get selected court name
+      let formWrapper = document.getElementById("usersNumberRegistrationForm");  // get input form
+
+      // hide input form and register button
+      formWrapper.style.display = "none";
+      let month = document.getElementById('month').value;
+      let day = document.getElementById('day').value;
+      let dayOfWeek = document.getElementById('dayOfWeek').value;
+      let userNum = document.getElementById('userNum').value;;
+      let sendValues = [month, day, dayOfWeek, userNum];
+      /** if either of the info is missing, abort process */
+      if ( !month || !day || !dayOfWeek || !userNum ) {
+        document.querySelector('#mainLoader').style.display = "none";
+        document.querySelector('#sendLoader').style.display = "none";
+        document.getElementsByClassName('doubleLoader')[0].style.display = "none";
+        alert("Some value is missing.");
+        return;
+      }
+      // console.log(`arguments of addValuesToSheet:\n1: ${selectedCourtName}\n2: ${sendValues}`);
+
+      try {
+        // function that runs after addValuesToSheet()
+        google.script.run.withSuccessHandler( (returnedValue) => {
+          // console.log("[addValuesToSheet()] Process succeeded. (data was stored into server");
+          // console.log("[sendButton Event Listner] showChart() fired");
+          showChart();  // Re-render chart
+          document.getElementById("sendButton").style.display = "block";
+          document.getElementById("sendLoader").style.display = "none";
+          document.getElementsByClassName('doubleLoader')[0].style.display = "none";
+          document.querySelector('#mainLoader').style.display = "none";
+        }).addValuesToSheet(selectedCourtName, sendValues);
+      } catch (e) {
+        document.getElementById("sendButton").style.display = "block";
+        document.getElementById("sendLoader").style.display = "none";
+        document.getElementsByClassName('doubleLoader')[0].style.display = "none";
+        alert(`Failed to send data.\n\n${e}`);
+      }
+    });
+  });
+</script>

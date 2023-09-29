@@ -1,0 +1,108 @@
+<script>
+  /** This is the script file for court-list.html */
+  function showPosition(position){
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+      var acc = position.coords.accuracy;
+      var alt = position.coords.altitude;
+      var dir = position.coords.heading;
+      var spd = position.coords.speed;
+      // console.log(`[showPosition()] Current Latitude: ${lat}`);
+      // console.log(`[showPosition()] Current Longitude: ${lon}`);
+      return [lat, lon];
+  };
+  
+
+  function showError(error) {
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        var denied = 'User denied the request for Geolocation';
+        alert('You can check the route to the basket courts with your GPS ON, but your GPS is turned off now. Please Refresh This Page after Allowing Location Permission.');
+        break;
+      case error.POSITION_UNAVAILABLE:
+        var unavailable = 'Location information is unavailable';
+        break;
+      case error.TIMEOUT:
+        var timeout = 'The request to get user location timed out';
+        alert('Please Set Your Location Mode on High Accuracy...');
+        break;
+      case error.UNKNOWN_ERROR:
+        var unknown = 'An unknown error occurred';
+        break;
+    }
+  }
+
+  /** After DOM generation, embed HTML with court info */
+  window.addEventListener("DOMContentLoaded", (event) => {
+    google.script.run.withSuccessHandler( (courtListData) => {
+      let bodyElement = document.querySelector(".gasBody");
+      courtListData.forEach( (courtDataArray, index) => {
+        /** Create html template */
+        let html = '<div class="map-wrapper fadeIn">'
+        /** Add court name */
+        if ( courtDataArray.name ) {
+          html += `<h2>${courtDataArray.name}</h2>`
+        } else {
+          html += "<h2>Unknown(Court name is not written)</h2>"
+        }
+        /** Add court address */
+        if ( courtDataArray.address ) {
+          html += `<p>${courtDataArray.address}</p>`
+        }
+        /** Add embedded court */
+        if ( courtDataArray.gMapEmbeddedLink ) {
+          html += `<div class="map">${courtDataArray.gMapEmbeddedLink}</div>`
+        } else {
+          html += '<div class="no-map-available-message">No map info</div>'
+        }
+        /** Add link to court official website */
+        if ( courtDataArray.siteLink ) {
+          html += `<p><a href="${courtDataArray.siteLink}" target="_blank" rel="noopener noreferrer" class="site-link">Official Website</a></p>`
+        }
+        /** Add itenirary link */
+        if ( courtDataArray.gMapLink ) {
+          html += `<a href="${courtDataArray.gMapLink}" target="_blank" rel="noopener noreferrer" class="route-map-link">Check the route on Google Map</a>`
+        }
+        /** Add tag to close the div element */
+        html += "</div>"
+        bodyElement.insertAdjacentHTML( 'beforeend', html);
+      })
+    }).getCourtListData();
+  });
+
+
+
+  /** aタグのhref属性をGoogle Map の経路リンクに変更する関数 */
+  async function embedRouteLinkElement() {
+    try {
+      let routeMapLinks = document.getElementsByClassName('route-map-link');
+      // console.log("Got .route-map-link tag inofo");
+      // console.log(routeMapLinks);
+      // console.log(routeMapLinks[0]);
+      // console.log(routeMapLinks[1]);
+    } catch (error) {
+      console.log(`Could not get information of .route-map-link element${route-map-link}`);
+    }
+    var startPointLatitude;
+    var startPointLongitude;
+    const coordinate = locate().then( (coordinate) => {
+      return coordinate;
+    });
+    startPointLatitude = coordinate[0];
+    startPointLongitude = coordinate[1];
+    // console.log(`coordinate: ${coordinate}`);
+    // console.log(`startPointLatitude: ${startPointLatitude}`);
+    // console.log(`startPointLongitude: ${startPointLongitude}`);
+
+    /** Add event listner that listens to map route display button */
+    for(let i = 0; i < routeMapLinks.length; i++){
+      // console.log(`href attribute of current element being processed: ${routeMapLinks[i].href}`);
+      let destinationPointLatitude = routeMapLinks[i].dataset.latitude;
+      let destinationPointLongitude = routeMapLinks[i].dataset.longitude;
+      // console.log(`destination latitude: ${routeMapLinks[i].dataset.latitude}`);
+      // console.log(`destination longitude: ${routeMapLinks[i].dataset.longitude}`);
+      const updatedHref = "https://wking";
+    }
+    console.log("[embedRouteLinkElement] href attributes were updated.");
+  }
+</script>

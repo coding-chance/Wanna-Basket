@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>User Data - Wanna Basket?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <?!= include("styles"); ?>
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <div class="navBar link-wrapper fadeIn">
+      <div class="link" onclick="openTopPage();" data-uri="/" id="linkToTopPage">
+        Top
+      </div>
+      <div class="link" id="linkToCourtListPage" onclick="openUrlSetOnCustomDataAttribute(this.getAttribute('data-uri'));" data-uri="court-list">
+        Court List
+      </div>
+    </div>
+
+    <!-- Header -->
+    <h1 class="header1">Number of Users</h1>
+    
+    <!-- Loader -->
+    <div class="lds-roller-wrapper">
+      <div class="lds-roller fadeIn" id="mainLoader"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+
+    <!-- Court Select Box -->
+    <div class="input-field col s12">
+      <h1>Select Chart</h1>
+      <select id="courtListDropdown">
+        <option value="" disabled selected>Which court ?</option>  
+        <? courtList.forEach( (court, index) => { ?>
+          <option value=<?= court ?>><?= court ?></option>
+        <? }) ?>
+      </select>
+      <a class="waves-effect waves-light btn" onclick="showChart()" id="showChartButton">
+        Show Chart
+      </a>
+    </div>
+
+    <!-- Campus to display chart -->
+    <div class="barWrapper fadeIn" id="generatedChartWrapper">
+      <h2 class="chart-title" id="selectedCourtName"></h2>
+      <canvas id='barChartCanvasForSelectedCourt'></canvas>
+    </div>
+
+    <!-- Bigger Loader -->
+    <span class="doubleLoader"></span>
+
+    <div class="formWrapper fadeIn" id="usersNumberRegistrationForm">
+      <div class="date-section">
+        <input type="text" id="month" placeholder="" value="">
+        <span class="monthFont">m</span>
+        <input type="text" id="day" placeholder="" value="">
+        <span class="dayFont">d</span>
+        <select name="dayOfWeek" id="dayOfWeek">
+          <option value="Sun">Sun</option>
+          <option value="Mon">Mon</option>
+          <option value="Tue">Tue</option>
+          <option value="Wed">Wed</option>
+          <option value="Thu">Thu</option>
+          <option value="Fri">Fri</option>
+          <option value="Sat">Sat</option>
+        </select>
+      </div>
+      <div class="user-num-section">
+        <label for="userNum" class="label">Users:</label>
+        <input type="text" id="userNum" placeholder="How many?">
+      </div>
+      <button id="sendButton">Register</button>
+    </div>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <?!= include("linkScript"); ?>
+  <?!= include("showSelectedChartScript"); ?>
+  <?!= include("registerCourtUsersDataScript"); ?>
+  
+</html>

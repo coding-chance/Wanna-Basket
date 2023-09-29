@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>Top - Wanna Basket?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <?!= include("styles"); ?>
+  </head>
+  <body>
+    <h1 class="header1 fadeIn">Wanna 🏀 ?</h1>
+    <!-- Loader -->
+    <div class="loader-wrapper fadeIn">
+      <div class="red-white-loader"></div>
+    </div>
+    <!-- Links -->
+    <div class="link-wrapper fadeIn">
+      <div class="link" id="linkToUserDataPage" onclick="showLoader(); openCourtUserDataPage();" data-uri="court-user-data">Court User Data</div>
+      <div class="link" id="linkToCourtListPage" onclick="showLoader(); openCourtListPage();" data-uri="court-list">Court List</div>
+    </div>
+  </body>
+  <?!= include("linkScript"); ?>
+</html>

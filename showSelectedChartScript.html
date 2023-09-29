@@ -1,0 +1,89 @@
+<script>
+  /** script for court-user-data.html */
+  function showChart(){
+    // Show loader
+    document.getElementsByClassName('doubleLoader')[0].style.display = "block";
+    // hide buttons
+    document.getElementById('showChartButton').style.display = "none";
+    document.getElementById('generatedChartWrapper').style.display = "none";
+    let courtListDropdown = document.getElementById('courtListDropdown');
+    let selectedCourt = courtListDropdown.value;
+    // Show error message when no court is selected
+    if ( !selectedCourt ) {
+      alert("Select a court.");
+      document.getElementsByClassName('doubleLoader')[0].style.display = "none";
+      document.getElementById('showChartButton').style.display = "block";
+      return;
+    }
+    // If a chart already exists, erase it
+    // console.log("[showChart()] Existing chart verification");
+    if (window.generatedChartObject){
+      // console.log('A chart has been already created');
+      window.generatedChartObject.destroy(); // Delete existing chart object
+      let existingCanvas = document.getElementById('barChartCanvasForSelectedCourt');  // Delete exisitign canvas for chart
+      existingCanvas.remove();
+      // console.log('Existing canvas has been deleted ');
+    } else {
+      ;
+      // console.log('[showChart()] No chart exists yet.');
+    }
+
+    // Get court user information from spreadsheet
+    google.script.run.withSuccessHandler( (avgUserValues) => {
+      // console.log(`[showChart()] Fetched users number value from spreadsheet\n${avgUserValues}`);      
+      let generatedChartWrapper = document.getElementById('generatedChartWrapper'); // Re-render chart
+      let newCanvasHtml = '<canvas id="barChartCanvasForSelectedCourt"></canvas>'
+      generatedChartWrapper.insertAdjacentHTML('beforeend', newCanvasHtml);
+      let ctx = document.getElementById('barChartCanvasForSelectedCourt');  // get chart target
+
+      // create chart object which contains values and style
+      let formattedData = {
+        labels: ["Mon", "Tue" , "Wed" , "Thu" , "Fri" , "Sat" , "Sun" ],
+        datasets: [{
+          label: 'User Count',
+          data: avgUserValues,
+          borderWidth: 1,
+          backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(255, 205, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(201, 203, 207, 0.2)'],
+          borderColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)', 'rgb(54, 162, 235)', 'rgb(153, 102, 255)', 'rgb(201, 203, 207)'],
+        }]
+      };
+
+      // create chart configuration object
+      let chartOptions = {
+        // indexAxis: 'y',
+        scales: {
+            y: { beginAtZero: true }
+        }
+      };
+
+      // create chart
+      window.generatedChartObject = new Chart(ctx, {
+        type: 'bar',
+        data: formattedData,
+        options: chartOptions,
+      });
+      // console.log(`[showChart()] window.generatedChartObject has been created`);
+      // console.log(window.generatedChartObject);
+      // show court name
+      document.getElementById('selectedCourtName').innerText = selectedCourt;
+      /** show chart and buttons */
+      document.getElementById('generatedChartWrapper').style.display = "block";
+      document.getElementById('showChartButton').style.display = "block";
+      document.getElementsByClassName('doubleLoader')[0].style.display = "none";
+      document.getElementById("usersNumberRegistrationForm").style.display = "block";
+      window.scrollBy(0, 1500);
+    }).withFailureHandler( (error) => {
+      console.log(`[getAvgUser()] Error: couldn't get data from spread sheet\n${error}`);
+      console.log("Sheet name of the spread sheet didn't match when front-side js code is run.");
+      document.getElementById('showChartButton').style.display = "block";
+      document.getElementById('generatedChartWrapper').style.display = "block";
+      document.getElementsByClassName('doubleLoader')[0].style.display = "none";
+      document.getElementById('selectedCourtName').style.display = "none";
+      alert("Error:\nFailed to fetch data from spread sheet.\nSelect other court or check the data source (spread-sheet).");
+    }).getAvgUser(selectedCourt);
+
+
+    /** --- Do not write line of code after this line otherwise it interreputs withSuccessHandler() --- */
+      
+  }
+</script>

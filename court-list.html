@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <?!= include("styles"); ?>
+  </head>
+  <body class="gasBody">
+    <!-- Navigation Bar -->
+    <div class="navBar link-wrapper fadeIn court-list-navbar">
+      <div class="link" onclick="showLoader(); openTopPage();" data-uri="/" id="linkToTopPage">
+        Top
+      </div>
+      <div class="link" onclick="showLoader(); openCourtUserDataPage();" data-uri="court-user-data">
+        Number of Users
+      </div>
+    </div>
+    
+    <h1 class="header1 fadeIn">Court List</h1>
+
+    <!-- Loader -->
+    <div class="loader-wrapper fadeIn">
+      <div class="red-white-loader"></div>
+    </div>
+  </body>
+
+  <?!= include("linkScript"); ?>
+  <?!= include("showCourtListScript"); ?>
+
+</html>

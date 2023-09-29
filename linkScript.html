@@ -1,0 +1,38 @@
+<script>
+  /** This is the script file for index.html */
+
+  /** Display loader when link is pressed */
+  function showLoader(){
+    document.querySelector('.link-wrapper').style.display = "none";
+    document.querySelector('.loader-wrapper').style.display = "block";
+  }
+
+  function openTopPage(){
+    google.script.run.withSuccessHandler(function(url){
+      window.open(`${url}`,'_top');
+    }).getScriptURL();
+  }
+
+  /** Navigate to average number of court users (court-user-data) */
+  function openCourtUserDataPage(){
+    google.script.run.withSuccessHandler(function(url){
+      window.open(`${url}?uri=court-user-data`,'_top');
+    }).getScriptURL();
+  }
+
+  /** Navigate to court-list page */
+  function openCourtListPage(){
+    google.script.run.withSuccessHandler(function(url){
+      window.open(`${url}?uri=court-list`,'_top');
+    }).getScriptURL();
+  }
+
+
+  /** Refactor page navigation */
+  function openUrlSetOnCustomDataAttribute(uri){
+    google.script.run.withSuccessHandler(function(url){
+      window.open(`${url}?uri=${uri}`,'_top');
+    }).getScriptURL();
+  }
+  
+</script>
